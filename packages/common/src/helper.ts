@@ -77,7 +77,7 @@ export const getFallbackFontName = (font: Font) => {
 };
 
 export const getDefaultFont = (): Font => ({
-  [DEFAULT_FONT_NAME]: { data: b64toUint8Array(HELVETICA), fallback: true },
+  [DEFAULT_FONT_NAME]: { data: { standardFont: 'Helvetica' }, fallback: true },
 });
 
 const uniq = <T>(array: Array<T>) => Array.from(new Set(array));
