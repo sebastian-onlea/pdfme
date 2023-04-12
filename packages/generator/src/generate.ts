@@ -24,7 +24,9 @@ const preprocessing = async (arg: {
 
   const embedCustomFonts = Object.values(font).some(({ data }) => !isStandardFont(data));
   if (embedCustomFonts) {
-    pdfDoc.registerFontkit(await import('@pdf-lib/fontkit'));
+    pdfDoc.registerFontkit(
+      await import(/* webpackChunkName: "pdf-lib-fontkit" */ '@pdf-lib/fontkit')
+    );
   }
 
   const fallbackFontName = getFallbackFontName(font);

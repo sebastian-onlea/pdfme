@@ -57,7 +57,7 @@ export const createBarCode = async (arg: {
 
   let res: Buffer;
 
-  const bwipjs = await import('bwip-js');
+  const bwipjs = await import(/* webpackChunkName: "bwip-js" */ 'bwip-js');
 
   if (typeof window !== 'undefined') {
     const canvas = document.createElement('canvas');
