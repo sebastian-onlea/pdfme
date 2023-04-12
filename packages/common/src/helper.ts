@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { HELVETICA } from './constants.js';
 import { Template, Schema, BasePdf, Font, CommonProps, isTextSchema, BarCodeType } from './type.js';
 import {
   Inputs as InputsSchema,

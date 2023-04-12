@@ -5,7 +5,6 @@ import {
   DEFAULT_CHARACTER_SPACING,
   DEFAULT_FONT_COLOR,
   BLANK_PDF,
-  HELVETICA,
 } from './constants.js';
 import { schemaTypes, isImageSchema, isBarcodeSchema, isTextSchema } from './type.js';
 import type {
@@ -55,7 +54,6 @@ export {
   DEFAULT_CHARACTER_SPACING,
   DEFAULT_FONT_COLOR,
   BLANK_PDF,
-  HELVETICA,
   schemaTypes,
   isTextSchema,
   isImageSchema,
