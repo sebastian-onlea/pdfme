@@ -1,21 +1,30 @@
 import React, { useContext, forwardRef, ReactNode, Ref, useEffect } from 'react';
-import { Size } from '@pdfme/common';
+import { Font, Size } from '@pdfme/common';
 import { FontContext } from '../contexts';
 import Spinner from './Spinner';
 
 type Props = { size: Size; scale: number; children: ReactNode };
+
+function fontNotStandardFont(a: [string, Font[string]]): a is [
+  string,
+  Omit<Font[string], 'data'> & { data: Exclude<Font[string]['data'], { standardFont: string }> }
+] {
+  return !(a[1].data as any).standardFont;
+}
 
 const Root = ({ size, scale, children }: Props, ref: Ref<HTMLDivElement>) => {
   const font = useContext(FontContext);
 
   useEffect(() => {
     if (!document || !document.fonts) return;
-    const fontFaces = Object.entries(font).map(
-      ([key, { data }]) =>
-        new FontFace(key, typeof data === 'string' ? `url(${data})` : data, {
-          display: 'swap',
-        })
-    );
+    const fontFaces = Object.entries(font)
+      .filter(fontNotStandardFont)
+      .map(
+        ([key, { data }]) =>
+          new FontFace(key, typeof data === 'string' ? `url(${data})` : data, {
+            display: 'swap',
+          })
+      );
     // @ts-ignore
     const newFontFaces = fontFaces.filter((fontFace) => !document.fonts.has(fontFace));
 
