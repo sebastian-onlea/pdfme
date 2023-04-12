@@ -8,6 +8,7 @@ import {
   degrees,
   setCharacterSpacing,
   TransformationMatrix,
+  StandardFonts,
 } from 'pdf-lib';
 import { ToBufferOptions } from 'bwip-js';
 import {
@@ -76,17 +77,29 @@ type EmbedPdfBox = {
   trimBox: { x: number; y: number; width: number; height: number };
 };
 
+function isStandardFont(fontData: any): fontData is {standardFont: string} {
+  return typeof fontData === 'object' && typeof fontData['standardFont'] === 'string';
+}
+
 export const embedAndGetFontObj = async (arg: { pdfDoc: PDFDocument; font: Font }) => {
   const { pdfDoc, font } = arg;
   const fontValues = await Promise.all(
     Object.values(font).map(async (v) => {
       let fontData = v.data;
-      if (typeof fontData === 'string' && fontData.startsWith('http')) {
-        fontData = await fetch(fontData).then((res) => res.arrayBuffer());
+      if (isStandardFont(fontData))  {
+        const fontName = fontData['standardFont'];
+        if (Object.keys(StandardFonts).includes(fontName)) {
+          return pdfDoc.embedStandardFont(fontName as StandardFonts)
+        }
+        throw new Error(`Font definition references non-existent standard font ${fontName}`)
+      } else {
+        if (typeof fontData === 'string' && fontData.startsWith('http')) {
+          fontData = await fetch(fontData).then((res) => res.arrayBuffer()) as ArrayBuffer;
+        }
+        return pdfDoc.embedFont(fontData, {
+          subset: typeof v.subset === 'undefined' ? true : v.subset,
+        });
       }
-      return pdfDoc.embedFont(fontData, {
-        subset: typeof v.subset === 'undefined' ? true : v.subset,
-      });
     })
   );
 
