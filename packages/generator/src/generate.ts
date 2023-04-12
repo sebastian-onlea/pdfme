@@ -1,5 +1,4 @@
 import { PDFDocument } from 'pdf-lib';
-import fontkit from '@pdf-lib/fontkit';
 import type { GenerateProps, Template, Font } from '@pdfme/common';
 import { getDefaultFont, getFallbackFontName, checkGenerateProps } from '@pdfme/common';
 import {
@@ -8,6 +7,7 @@ import {
   drawEmbeddedPage,
   embedAndGetFontObj,
   InputImageCache,
+  isStandardFont,
 } from './helper.js';
 import { TOOL_NAME } from './constants.js';
 
@@ -21,7 +21,11 @@ const preprocessing = async (arg: {
   const { basePdf } = template;
 
   const pdfDoc = await PDFDocument.create();
-  pdfDoc.registerFontkit(fontkit);
+
+  const embedCustomFonts = Object.values(font).some(({data}) => !isStandardFont(data) )
+  if (embedCustomFonts) {
+    pdfDoc.registerFontkit(await import('@pdf-lib/fontkit'));
+  }
 
   const fallbackFontName = getFallbackFontName(font);
   const fontObj = await embedAndGetFontObj({ pdfDoc, font });
