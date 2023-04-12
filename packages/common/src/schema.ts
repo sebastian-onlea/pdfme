@@ -54,7 +54,12 @@ const Uint8ArraySchema: z.ZodSchema<Uint8Array> = z.any().refine((v) => v instan
 
 export const Font = z.record(
   z.object({
-    data: z.union([z.object({standardFont: z.string()}), z.string(), ArrayBufferSchema, Uint8ArraySchema]),
+    data: z.union([
+      z.object({ standardFont: z.string() }),
+      z.string(),
+      ArrayBufferSchema,
+      Uint8ArraySchema,
+    ]),
     fallback: z.boolean().optional(),
     subset: z.boolean().optional(),
   })

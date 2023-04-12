@@ -5,7 +5,9 @@ import Spinner from './Spinner';
 
 type Props = { size: Size; scale: number; children: ReactNode };
 
-function fontNotStandardFont(a: [string, Font[string]]): a is [
+function fontNotStandardFont(
+  a: [string, Font[string]]
+): a is [
   string,
   Omit<Font[string], 'data'> & { data: Exclude<Font[string]['data'], { standardFont: string }> }
 ] {

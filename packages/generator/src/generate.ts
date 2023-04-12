@@ -22,7 +22,7 @@ const preprocessing = async (arg: {
 
   const pdfDoc = await PDFDocument.create();
 
-  const embedCustomFonts = Object.values(font).some(({data}) => !isStandardFont(data) )
+  const embedCustomFonts = Object.values(font).some(({ data }) => !isStandardFont(data));
   if (embedCustomFonts) {
     pdfDoc.registerFontkit(await import('@pdf-lib/fontkit'));
   }
