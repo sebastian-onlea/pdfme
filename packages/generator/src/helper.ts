@@ -77,7 +77,7 @@ type EmbedPdfBox = {
   trimBox: { x: number; y: number; width: number; height: number };
 };
 
-function isStandardFont(fontData: any): fontData is {standardFont: string} {
+export function isStandardFont(fontData: any): fontData is {standardFont: string} {
   return typeof fontData === 'object' && typeof fontData['standardFont'] === 'string';
 }
 
